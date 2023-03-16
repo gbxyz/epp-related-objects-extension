@@ -1,0 +1,407 @@
+<?xml version="1.0" encoding="us-ascii"?>
+<!DOCTYPE rfc SYSTEM "rfc2629.dtd" [
+<!ENTITY RFC2119 SYSTEM "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.2119.xml">
+<!ENTITY RFC3688 SYSTEM "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.3688.xml">
+<!ENTITY RFC5730 SYSTEM "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5730.xml">
+<!ENTITY RFC5731 SYSTEM "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5731.xml">
+<!ENTITY RFC5732 SYSTEM "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5732.xml">
+<!ENTITY RFC5733 SYSTEM "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5733.xml">
+<!ENTITY RFC7451 SYSTEM "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.7451.xml">
+<!ENTITY RFC8544 SYSTEM "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8544.xml">
+]>
+<?xml-stylesheet type="text/xsl" href="rfc2629.xslt" ?>
+<?rfc strict="yes" ?>
+<?rfc toc="yes"?>
+<?rfc tocdepth="4"?>
+<?rfc symrefs="yes"?>
+<?rfc sortrefs="yes" ?>
+<?rfc compact="yes" ?>
+<?rfc subcompact="no" ?>
+<?rfc comments="yes" ?>
+<?rfc inline="yes" ?>
+<rfc category="std" docName="draft-regext-brown-epp-related-objects-00" ipr="trust200902" submissionType="IETF" consensus="true">
+
+<front>
+<title abbrev="Related Objects Extension for EPP">Extensible Provisioning Protocol (EPP) Extension for Related Objects</title>
+
+<author fullname="Gavin Brown" initials="G" surname="Brown">
+<organization>CentralNic Group plc</organization>
+<address>
+<postal>
+<street>44 Gutter Lane</street>
+<city>London</city>
+<code>EC2V 6BR</code>
+<country>GB</country>
+</postal>
+<phone>+44 20 33 88 0600</phone>
+<email>gavin.brown@centralnic.com</email>
+<uri>https://www.centralnic.com</uri>
+</address>
+</author>
+
+<date month="March" year="2023" day="16"/>
+<area>Applications</area>
+<workgroup>Registration Protocols Extensions (regext)</workgroup>
+
+<abstract>
+<t>
+This document describes an extension to the Extensible Provisioning Protocol (EPP) that allows EPP clients to request the inclusion of related objects in responses to <spanx style="verb">&lt;info&gt;</spanx> commands.
+</t>
+</abstract>
+</front>
+
+<middle>
+<section title="Introduction">
+
+<t>
+The <xref target="RFC5730">Extensible Provisioning Protocol (EPP)</xref> is an object provisioning and management protocol, allowing clients to create, view and transform objects in a central repository.
+</t>
+
+<t>
+The EPP <spanx style="verb">&lt;info&gt;</spanx> command allows clients to retrieve information (subject to authorisation) about objects in the repository. Since EPP operates on a strictly per-object basis, and since objects may be related to one another, a client may often need to issue multiple <spanx style="verb">&lt;info&gt;</spanx> commands in order to retrieve the data it needs to carry out its operation.
+</t>
+
+<t>
+This document describes an extension to the <spanx style="verb">&lt;info&gt;</spanx> command that allows clients to request the inclusion of information about related objects in responses. This allows clients to retrieve all the required information about an object in a single round-trip to the server.
+</t>
+
+<section title="Conventions used in this document">
+<t>
+The key words <spanx style="verb">MUST</spanx>, <spanx style="verb">MUST NOT</spanx>, <spanx style="verb">REQUIRED</spanx>, <spanx style="verb">SHALL</spanx>, <spanx style="verb">SHALL NOT</spanx>, <spanx style="verb">SHOULD</spanx>, <spanx style="verb">SHOULD NOT</spanx>, <spanx style="verb">RECOMMENDED</spanx>, <spanx style="verb">MAY</spanx>, and <spanx style="verb">OPTIONAL</spanx> in this document are to be interpreted as described in <xref target="RFC2119"/>.
+</t>
+
+<t>
+In examples, <spanx style="verb">C:</spanx> represents lines sent by a protocol client and <spanx style="verb">S:</spanx> represents lines returned by a protocol server.
+Indentation and white space in examples are provided only to illustrate element relationships and are not REQUIRED features of this protocol.
+</t>
+
+<t>
+A protocol client that is authorized to manage an existing object is described as a "sponsoring" client throughout this document.
+</t>
+
+<t>
+XML is case sensitive.
+Unless stated otherwise, XML specifications and examples provided in this document <bcp14>MUST</bcp14> be interpreted in the character case presented in order to develop a conforming implementation.
+</t>
+
+<t>
+EPP uses XML namespaces to provide an extensible object management framework and to identify schemas required for XML instance parsing and validation.
+These namespaces and schema definitions are used to identify both the base protocol schema and the schemas for managed objects.
+</t>
+
+<t>
+The XML namespace prefixes used in examples (such as the string <spanx style="verb">ro</spanx> in <spanx style="verb">ro:include</spanx>) are solely for illustrative purposes.
+A conforming implementation <bcp14>MUST NOT</bcp14> require the use of these or any other specific namespace prefixes.
+</t>
+</section>
+</section>
+
+<section title="EPP &lt;info&gt; command">
+
+<t>
+This extension defines additional elements to extend the EPP <spanx style="verb">&lt;info&gt;</spanx> command and response.
+</t>
+
+<t>
+Clients wishing to request related object information <bcp14>MUST</bcp14> include a <spanx style="verb">&lt;ro:info&gt;</spanx> element in the <spanx style="verb">&lt;extension&gt;</spanx> element of the <spanx style="verb">&lt;info&gt;</spanx> frame. The <spanx style="verb">&lt;ro:info&gt;</spanx> element contains a <spanx style="verb">&lt;ro:include&gt;</spanx> element which MUST contain one or more of the following child elements:
+</t>
+
+<list style="symbols">
+  <t><spanx style="verb">&lt;ro:registrant/&gt;</spanx>, which requests the inclusion of the <xref target="RFC5733">contact object</xref> corresponding to a domain's registrant;</t>
+  <t><spanx style="verb">&lt;ro:contacts/&gt;</spanx>, which requests the inclusion of the administrative, technical and billing contacts for a domain;</t>
+  <t><spanx style="verb">&lt;ro:orgs/&gt;</spanx>, which requests the inclusion of the <xref target="RFC8544">organisations</xref> associated with a domain;</t>
+  <t><spanx style="verb">&lt;ro:ns/&gt;</spanx>, which requests the inclusion of the <xref target="RFC5732">host object(s)</xref> to which a domain is delegated;</t>
+  <t><spanx style="verb">&lt;ro:hosts/&gt;</spanx>, which requests the inclusion of any subordinate host objects of a domain (see Section 1.1 of <xref target="RFC5731"/>);</t>
+  <t><spanx style="verb">&lt;ro:other/&gt;</spanx>, which requests the inclusion of other related objects not covered by the previous elements, such as those described in future EPP extensions.</t>
+</list>
+
+<t>
+Example <spanx style="verb">&lt;info&gt;</spanx> command:
+</t>
+
+<figure>
+<artwork>
+C:&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;no&quot;?&gt;
+C:&lt;epp xmlns=&quot;urn:ietf:params:xml:ns:epp-1.0&quot;&gt;
+C:  &lt;command&gt;
+C:    &lt;info&gt;
+C:      &lt;domain:info xmlns:domain=&quot;urn:ietf:params:xml:ns:domain-1.0&quot;&gt;
+C:        &lt;domain:name hosts=&quot;all&quot;&gt;example.com&lt;/domain:name&gt;
+C:      &lt;/domain:info&gt;
+C:    &lt;/info&gt;
+C:    &lt;extension&gt;
+C:      &lt;ro:info xmlns:ro=&quot;urn:ietf:params:xml:ns:epp:relatedObjects-1.0&quot;&gt;
+C:        &lt;ro:include&gt;
+C:          &lt;ro:registrant/&gt;
+C:          &lt;ro:ns/&gt;
+C:          &lt;ro:other/&gt;
+C:        &lt;/ro:include&gt;
+C:      &lt;/ro:info&gt;
+C:    &lt;/extension&gt;
+C:    &lt;clTRID&gt;ABC-12345&lt;/clTRID&gt;
+C:  &lt;/command&gt;
+C:&lt;/epp&gt;
+</artwork>
+</figure>
+
+<section title="Response">
+
+<t>
+A server responding to an <spanx style="verb">&lt;info&gt;</spanx> command that has been extended with a <spanx style="verb">&lt;ro:info&gt;</spanx> element MAY include an <spanx style="verb">&lt;ro:infData&gt;</spanx> element in the <spanx style="verb">&lt;extension&gt;</spanx> element of the response.
+</t>
+
+<t>
+If present, the <spanx style="verb">&lt;ro:infData&gt;</spanx> element <bcp14>MUST</bcp14> include one or more <spanx style="verb">&lt;infData&gt;</spanx> elements, scoped to the namespace URI of an EPP object mapping.
+</t>
+
+<t>
+Example <spanx style="verb">&lt;info&gt;</spanx> response:
+</t>
+
+<figure>
+<artwork>
+S:&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;no&quot;?&gt;
+S:&lt;epp xmlns=&quot;urn:ietf:params:xml:ns:epp-1.0&quot;&gt;
+S:  &lt;response&gt;
+S:    &lt;result code=&quot;1000&quot;&gt;
+S:      &lt;msg&gt;Command completed successfully&lt;/msg&gt;
+S:    &lt;/result&gt;
+S:    &lt;resData&gt;
+S:      &lt;domain:infData xmlns:domain=&quot;urn:ietf:params:xml:ns:domain-1.0&quot;&gt;
+S:        &lt;domain:name&gt;example.com&lt;/domain:name&gt;
+S:        &lt;domain:roid&gt;EXAMPLE1-REP&lt;/domain:roid&gt;
+S:        &lt;domain:status s=&quot;ok&quot;/&gt;
+S:        &lt;domain:registrant&gt;jd1234&lt;/domain:registrant&gt;
+S:        &lt;domain:contact type=&quot;admin&quot;&gt;sh8013&lt;/domain:contact&gt;
+S:        &lt;domain:contact type=&quot;tech&quot;&gt;sh8013&lt;/domain:contact&gt;
+S:        &lt;domain:ns&gt;
+S:          &lt;domain:hostObj&gt;ns1.example.com&lt;/domain:hostObj&gt;
+S:          &lt;domain:hostObj&gt;ns1.example.net&lt;/domain:hostObj&gt;
+S:        &lt;/domain:ns&gt;
+S:        &lt;domain:host&gt;ns1.example.com&lt;/domain:host&gt;
+S:        &lt;domain:host&gt;ns2.example.com&lt;/domain:host&gt;
+S:        &lt;domain:clID&gt;ClientX&lt;/domain:clID&gt;
+S:        &lt;domain:crID&gt;ClientY&lt;/domain:crID&gt;
+S:        &lt;domain:crDate&gt;1999-04-03T22:00:00.0Z&lt;/domain:crDate&gt;
+S:        &lt;domain:upID&gt;ClientX&lt;/domain:upID&gt;
+S:        &lt;domain:upDate&gt;1999-12-03T09:00:00.0Z&lt;/domain:upDate&gt;
+S:        &lt;domain:exDate&gt;2005-04-03T22:00:00.0Z&lt;/domain:exDate&gt;
+S:        &lt;domain:trDate&gt;2000-04-08T09:00:00.0Z&lt;/domain:trDate&gt;
+S:        &lt;domain:authInfo&gt;
+S:          &lt;domain:pw&gt;2fooBAR&lt;/domain:pw&gt;
+S:        &lt;/domain:authInfo&gt;
+S:      &lt;/domain:infData&gt;
+S:    &lt;/resData&gt;
+S:    &lt;extension&gt;
+S:      &lt;ro:infData xmlns:ro=&quot;urn:ietf:params:xml:ns:epp:relatedObjects-1.0&quot;&gt;
+S:        &lt;contact:infData xmlns:contact=&quot;urn:ietf:params:xml:ns:contact-1.0&quot;&gt;
+S:          &lt;contact:id&gt;jd1234&lt;/contact:id&gt;
+S:          &lt;contact:roid&gt;JD1234-REP&lt;/contact:roid&gt;
+S:          &lt;contact:status s=&quot;linked&quot;/&gt;
+S:          &lt;contact:status s=&quot;clientDeleteProhibited&quot;/&gt;
+S:          &lt;contact:postalInfo type=&quot;int&quot;&gt;
+S:            &lt;contact:name&gt;John Doe&lt;/contact:name&gt;
+S:            &lt;contact:org&gt;Example Inc.&lt;/contact:org&gt;
+S:            &lt;contact:addr&gt;
+S:              &lt;contact:street&gt;123 Example Dr.&lt;/contact:street&gt;
+S:              &lt;contact:street&gt;Suite 100&lt;/contact:street&gt;
+S:              &lt;contact:city&gt;Dulles&lt;/contact:city&gt;
+S:              &lt;contact:sp&gt;VA&lt;/contact:sp&gt;
+S:              &lt;contact:pc&gt;20166-6503&lt;/contact:pc&gt;
+S:              &lt;contact:cc&gt;US&lt;/contact:cc&gt;
+S:            &lt;/contact:addr&gt;
+S:          &lt;/contact:postalInfo&gt;
+S:          &lt;contact:voice x=&quot;1234&quot;&gt;+1.7035555555&lt;/contact:voice&gt;
+S:          &lt;contact:email&gt;jdoe@example.com&lt;/contact:email&gt;
+S:          &lt;contact:clID&gt;ClientY&lt;/contact:clID&gt;
+S:          &lt;contact:crID&gt;ClientX&lt;/contact:crID&gt;
+S:          &lt;contact:crDate&gt;1999-04-03T22:00:00.0Z&lt;/contact:crDate&gt;
+S:        &lt;/contact:infData&gt;
+S:        &lt;host:infData xmlns:host=&quot;urn:ietf:params:xml:ns:host-1.0&quot;&gt;
+S:          &lt;host:name&gt;ns1.example.com&lt;/host:name&gt;
+S:          &lt;host:roid&gt;NS1_EXAMPLE1-REP&lt;/host:roid&gt;
+S:          &lt;host:status s=&quot;linked&quot;/&gt;
+S:          &lt;host:addr ip=&quot;v4&quot;&gt;192.0.2.2&lt;/host:addr&gt;
+S:          &lt;host:clID&gt;ClientY&lt;/host:clID&gt;
+S:          &lt;host:crID&gt;ClientX&lt;/host:crID&gt;
+S:          &lt;host:crDate&gt;1999-04-03T22:00:00.0Z&lt;/host:crDate&gt;
+S:        &lt;/host:infData&gt;
+S:        &lt;host:infData xmlns:host=&quot;urn:ietf:params:xml:ns:host-1.0&quot;&gt;
+S:          &lt;host:name&gt;ns1.example.net&lt;/host:name&gt;
+S:          &lt;host:roid&gt;NS1_EXAMPLE2-REP&lt;/host:roid&gt;
+S:          &lt;host:status s=&quot;linked&quot;/&gt;
+S:          &lt;host:addr ip=&quot;v4&quot;&gt;192.0.2.29&lt;/host:addr&gt;
+S:          &lt;host:clID&gt;ClientY&lt;/host:clID&gt;
+S:          &lt;host:crID&gt;ClientX&lt;/host:crID&gt;
+S:          &lt;host:crDate&gt;1999-04-03T22:00:00.0Z&lt;/host:crDate&gt;
+S:        &lt;/host:infData&gt;
+S:      &lt;/ro:infData&gt;
+S:    &lt;/extension&gt;
+S:    &lt;trID&gt;
+S:      &lt;clTRID&gt;ABC-12345&lt;/clTRID&gt;
+S:      &lt;svTRID&gt;54322-XYZ&lt;/svTRID&gt;
+S:    &lt;/trID&gt;
+S:  &lt;/response&gt;
+S:&lt;/epp&gt;
+</artwork>
+</figure>
+
+</section>
+
+</section>
+
+<section title="Inclusion of related objects in &lt;info&gt; responses">
+
+<t>
+Servers <bcp14>MAY</bcp14> choose to include all, some, or none of the relevant requested objects in the <spanx style="verb">&lt;ro:infData&gt;</spanx> element, according to applicable policies.
+</t>
+
+<t>
+When determining whether to include a related object in the <spanx style="verb">&lt;ro:infData&gt;</spanx> element, servers <bcp14>SHOULD</bcp14> apply the same access control rules that are used to determine whether a client is authorised to perform an <spanx style="verb">&lt;info&gt;</spanx> on those objects.
+</t>
+
+<t>
+Since EPP does not provide a way for servers to indicate a partial success or failure of a command, servers <bcp14>MUST NOT</bcp14> return an error if a related object cannot be included in a response. Instead, the object should simply be omitted from the <spanx style="verb">&lt;ro:infData&gt;</spanx> element. An error response <bcp14>MUST</bcp14> only be used when the server cannot disclose the information about the "primary" object, that is, the object specified in the <spanx style="verb">&lt;info&gt;</spanx> element.
+</t>
+
+</section>
+
+<section anchor="security-considerations" title="Security considerations">
+<t>
+The extension described in this document does not provide any security services or introduce any additional considerations beyond those described by <xref target="RFC5730"/> or those caused by the protocol layers used by EPP.
+</t>
+</section>
+
+<section anchor="IANA" title="IANA considerations">
+<section title="XML namespace">
+<t>
+This document uses URNs to describe XML namespaces and XML schemas conforming to a registry mechanism described in <xref target="RFC3688"/>. The following URI assignment has been made by IANA:
+</t>
+
+<t>
+Registration for the TTL namespace:
+</t>
+<list>
+<t>
+<strong>URI:</strong> <spanx style="verb">urn:ietf:params:xml:ns:epp:relatedObjects-1.0</spanx>
+</t>
+<t>
+<strong>Registrant Contact:</strong> See the author of this document
+</t>
+<t>
+<strong>XML:</strong> None. Namespace URIs do not represent an XML specification
+</t>
+</list>
+
+<t>
+Registration for the TTL XML schema:
+</t>
+<list>
+<t>
+<strong>URI:</strong> <spanx style="verb">urn:ietf:params:xml:ns:epp:relatedObjects-1.0</spanx>
+</t>
+<t>
+<strong>Registrant Contact:</strong> See the author of this document
+</t>
+<t>
+<strong>XML:</strong> See the "<xref target="formal-specification" format="title"/>" section of this document
+</t>
+</list>
+</section>
+
+<section title="EPP extension registry">
+<t>
+The EPP extension described in this document has been registered by the IANA in the Extensions for the "Extensible Provisioning Protocol (EPP)" registry described in <xref target="RFC7451"/>.
+The details of the registration are as follows:
+</t>
+
+<list>
+<t>
+<strong>Name of Extension:</strong> Extensible Provisioning Protocol (EPP) Extension for Related Objects
+</t>
+<t>
+<strong>Document Status:</strong> Standards Track
+</t>
+<t>
+<strong>Reference:</strong> URL of this document
+</t>
+<t>
+<strong>Registrant Name and Email Address:</strong> See the author of this document
+</t>
+<t>
+<strong>TLDs:</strong> Any
+</t>
+<t>
+<strong>IPR Disclosure:</strong> None
+</t>
+<t>
+<strong>Status:</strong> Active
+</t>
+<t>
+<strong>Notes:</strong> None
+</t>
+</list>
+</section>
+</section>
+
+<section anchor="formal-specification" title="Formal specification">
+<figure>
+<artwork>
+&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;schema
+  targetNamespace=&quot;urn:ietf:params:xml:ns:epp:relatedObjects-1.0&quot;
+  xmlns:ro=&quot;urn:ietf:params:xml:ns:epp:relatedObjects-1.0&quot;
+  xmlns=&quot;http://www.w3.org/2001/XMLSchema&quot;
+  elementFormDefault=&quot;qualified&quot;&gt;
+  &lt;annotation&gt;
+    &lt;documentation&gt;
+      Extensible Provisioning Protocol v1.0 extension schema for
+      related objects.
+    &lt;/documentation&gt;
+  &lt;/annotation&gt;
+
+  &lt;element name=&quot;info&quot;  type=&quot;ro:info&quot; /&gt;
+  &lt;element name=&quot;infData&quot; type=&quot;ro:infData&quot; /&gt;
+
+  &lt;complexType name=&quot;info&quot;&gt;
+    &lt;sequence&gt;
+      &lt;element name=&quot;include&quot; type=&quot;ro:include&quot; /&gt;
+    &lt;/sequence&gt;
+  &lt;/complexType&gt;
+
+  &lt;complexType name=&quot;include&quot;&gt;
+    &lt;all&gt;
+      &lt;element name=&quot;registrant&quot; minOccurs=&quot;0&quot; maxOccurs=&quot;1&quot; /&gt;
+      &lt;element name=&quot;contacts&quot; minOccurs=&quot;0&quot; maxOccurs=&quot;1&quot; /&gt;
+      &lt;element name=&quot;orgs&quot; minOccurs=&quot;0&quot; maxOccurs=&quot;1&quot; /&gt;
+      &lt;element name=&quot;ns&quot; minOccurs=&quot;0&quot; maxOccurs=&quot;1&quot; /&gt;
+      &lt;element name=&quot;hosts&quot; minOccurs=&quot;0&quot; maxOccurs=&quot;1&quot; /&gt;
+      &lt;element name=&quot;other&quot; minOccurs=&quot;0&quot; maxOccurs=&quot;1&quot; /&gt;
+    &lt;/all&gt;
+  &lt;/complexType&gt;
+
+  &lt;complexType name=&quot;infData&quot;&gt;
+    &lt;sequence&gt;
+      &lt;element name=&quot;infData&quot; namespace=&quot;##other&quot; minOccurs=&quot;1&quot; maxOccurs=&quot;unbounded&quot; /&gt;
+    &lt;/sequence&gt;
+  &lt;/complexType&gt;
+&lt;/schema&gt;
+</artwork>
+</figure>
+</section>
+
+</middle>
+
+<back>
+<references title="Normative references">
+&RFC2119;
+&RFC3688;
+&RFC5730;
+&RFC5731;
+&RFC5732;
+&RFC5733;
+&RFC7451;
+&RFC8544;
+</references>
+</back>
+</rfc>
