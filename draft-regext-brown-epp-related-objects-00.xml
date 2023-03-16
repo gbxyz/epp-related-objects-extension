@@ -130,7 +130,8 @@ C:        &lt;domain:name hosts=&quot;all&quot;&gt;example.com&lt;/domain:name&g
 C:      &lt;/domain:info&gt;
 C:    &lt;/info&gt;
 C:    &lt;extension&gt;
-C:      &lt;ro:info xmlns:ro=&quot;urn:ietf:params:xml:ns:epp:relatedObjects-1.0&quot;&gt;
+C:      &lt;ro:info
+C:        xmlns:ro=&quot;urn:ietf:params:xml:ns:epp:relatedObjects-1.0&quot;&gt;
 C:        &lt;ro:include&gt;
 C:          &lt;ro:registrant/&gt;
 C:          &lt;ro:ns/&gt;
@@ -167,7 +168,8 @@ S:    &lt;result code=&quot;1000&quot;&gt;
 S:      &lt;msg&gt;Command completed successfully&lt;/msg&gt;
 S:    &lt;/result&gt;
 S:    &lt;resData&gt;
-S:      &lt;domain:infData xmlns:domain=&quot;urn:ietf:params:xml:ns:domain-1.0&quot;&gt;
+S:      &lt;domain:infData
+S:        xmlns:domain=&quot;urn:ietf:params:xml:ns:domain-1.0&quot;&gt;
 S:        &lt;domain:name&gt;example.com&lt;/domain:name&gt;
 S:        &lt;domain:roid&gt;EXAMPLE1-REP&lt;/domain:roid&gt;
 S:        &lt;domain:status s=&quot;ok&quot;/&gt;
@@ -193,8 +195,10 @@ S:        &lt;/domain:authInfo&gt;
 S:      &lt;/domain:infData&gt;
 S:    &lt;/resData&gt;
 S:    &lt;extension&gt;
-S:      &lt;ro:infData xmlns:ro=&quot;urn:ietf:params:xml:ns:epp:relatedObjects-1.0&quot;&gt;
-S:        &lt;contact:infData xmlns:contact=&quot;urn:ietf:params:xml:ns:contact-1.0&quot;&gt;
+S:      &lt;ro:infData
+S:        xmlns:ro=&quot;urn:ietf:params:xml:ns:epp:relatedObjects-1.0&quot;&gt;
+S:        &lt;contact:infData
+S:          xmlns:contact=&quot;urn:ietf:params:xml:ns:contact-1.0&quot;&gt;
 S:          &lt;contact:id&gt;jd1234&lt;/contact:id&gt;
 S:          &lt;contact:roid&gt;JD1234-REP&lt;/contact:roid&gt;
 S:          &lt;contact:status s=&quot;linked&quot;/&gt;
@@ -217,7 +221,8 @@ S:          &lt;contact:clID&gt;ClientY&lt;/contact:clID&gt;
 S:          &lt;contact:crID&gt;ClientX&lt;/contact:crID&gt;
 S:          &lt;contact:crDate&gt;1999-04-03T22:00:00.0Z&lt;/contact:crDate&gt;
 S:        &lt;/contact:infData&gt;
-S:        &lt;host:infData xmlns:host=&quot;urn:ietf:params:xml:ns:host-1.0&quot;&gt;
+S:        &lt;host:infData
+S:          xmlns:host=&quot;urn:ietf:params:xml:ns:host-1.0&quot;&gt;
 S:          &lt;host:name&gt;ns1.example.com&lt;/host:name&gt;
 S:          &lt;host:roid&gt;NS1_EXAMPLE1-REP&lt;/host:roid&gt;
 S:          &lt;host:status s=&quot;linked&quot;/&gt;
@@ -226,7 +231,8 @@ S:          &lt;host:clID&gt;ClientY&lt;/host:clID&gt;
 S:          &lt;host:crID&gt;ClientX&lt;/host:crID&gt;
 S:          &lt;host:crDate&gt;1999-04-03T22:00:00.0Z&lt;/host:crDate&gt;
 S:        &lt;/host:infData&gt;
-S:        &lt;host:infData xmlns:host=&quot;urn:ietf:params:xml:ns:host-1.0&quot;&gt;
+S:        &lt;host:infData
+S:          xmlns:host=&quot;urn:ietf:params:xml:ns:host-1.0&quot;&gt;
 S:          &lt;host:name&gt;ns1.example.net&lt;/host:name&gt;
 S:          &lt;host:roid&gt;NS1_EXAMPLE2-REP&lt;/host:roid&gt;
 S:          &lt;host:status s=&quot;linked&quot;/&gt;
@@ -382,7 +388,8 @@ The details of the registration are as follows:
 
   &lt;complexType name=&quot;infData&quot;&gt;
     &lt;sequence&gt;
-      &lt;element name=&quot;infData&quot; namespace=&quot;##other&quot; minOccurs=&quot;1&quot; maxOccurs=&quot;unbounded&quot; /&gt;
+      &lt;element name=&quot;infData&quot; namespace=&quot;##other&quot;
+        minOccurs=&quot;1&quot; maxOccurs=&quot;unbounded&quot; /&gt;
     &lt;/sequence&gt;
   &lt;/complexType&gt;
 &lt;/schema&gt;
