@@ -19,9 +19,9 @@ jobs:
         with:
           fetch-depth: 0
 
-      - run: apt -qqq update
+      - run: sudo apt -qqq update
 
-      - run: apt -qqq install xml2rfc
+      - run: sudo apt -qqq install xml2rfc
 
       - run: rm -rf _site ; mkdir -v _site
 
