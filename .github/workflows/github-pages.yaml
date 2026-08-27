@@ -15,7 +15,7 @@ jobs:
       pages: write
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout
         with:
           fetch-depth: 0
 
@@ -29,8 +29,8 @@ jobs:
 
       - run: tar --directory=_site -z -c -v -f github-pages .
 
-      - uses: actions/configure-pages@v4
+      - uses: actions/configure-pages
 
-      - uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact
 
-      - uses: actions/deploy-pages@v4
+      - uses: actions/deploy-pages
