@@ -147,7 +147,7 @@ C:      &lt;/domain:info&gt;
 C:    &lt;/info&gt;
 C:    &lt;extension&gt;
 C:      &lt;ro:info
-C:        xmlns:ro=&quot;urn:ietf:params:xml:ns:epp:relatedObjects-1.0&quot;&gt;
+C:        xmlns:ro=&quot;https://gavinbrown.xyz/xmlns/epp/related-objects-1.0&quot;&gt;
 C:        &lt;ro:include&gt;
 C:          &lt;ro:registrant/&gt;
 C:          &lt;ro:ns/&gt;
@@ -212,7 +212,7 @@ S:      &lt;/domain:infData&gt;
 S:    &lt;/resData&gt;
 S:    &lt;extension&gt;
 S:      &lt;ro:infData
-S:        xmlns:ro=&quot;urn:ietf:params:xml:ns:epp:relatedObjects-1.0&quot;&gt;
+S:        xmlns:ro=&quot;https://gavinbrown.xyz/xmlns/epp/related-objects-1.0&quot;&gt;
 S:        &lt;contact:infData
 S:          xmlns:contact=&quot;urn:ietf:params:xml:ns:contact-1.0&quot;&gt;
 S:          &lt;contact:id&gt;jd1234&lt;/contact:id&gt;
@@ -310,7 +310,7 @@ Registration for the XML namespace ("ns" subregistry):
 
 <list>
 <t>
-<strong>URI:</strong> <spanx style="verb">urn:ietf:params:xml:ns:epp:relatedObjects-1.0</spanx>
+<strong>URI:</strong> <spanx style="verb">https://gavinbrown.xyz/xmlns/epp/related-objects-1.0</spanx>
 </t>
 <t>
 <strong>Registrant Contact:</strong> See the author of this document
@@ -326,7 +326,7 @@ Registration for the XML schema ("schema" subregistry):
 
 <list>
 <t>
-<strong>URI:</strong> <spanx style="verb">urn:ietf:params:xml:ns:epp:relatedObjects-1.0</spanx>
+<strong>URI:</strong> <spanx style="verb">https://gavinbrown.xyz/xmlns/epp/related-objects-1.0</spanx>
 </t>
 <t>
 <strong>Registrant Contact:</strong> See the author of this document
@@ -377,8 +377,8 @@ The details of the registration are as follows:
 <artwork>
 &lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
 &lt;schema
-  targetNamespace=&quot;urn:ietf:params:xml:ns:epp:relatedObjects-1.0&quot;
-  xmlns:ro=&quot;urn:ietf:params:xml:ns:epp:relatedObjects-1.0&quot;
+  targetNamespace=&quot;https://gavinbrown.xyz/xmlns/epp/related-objects-1.0&quot;
+  xmlns:ro=&quot;https://gavinbrown.xyz/xmlns/epp/related-objects-1.0&quot;
   xmlns=&quot;http://www.w3.org/2001/XMLSchema&quot;
   elementFormDefault=&quot;qualified&quot;&gt;
   &lt;annotation&gt;
