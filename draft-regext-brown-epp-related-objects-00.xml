@@ -7,6 +7,7 @@
 <!ENTITY RFC5732 SYSTEM "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5732.xml">
 <!ENTITY RFC5733 SYSTEM "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.5733.xml">
 <!ENTITY RFC7451 SYSTEM "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.7451.xml">
+<!ENTITY RFC8174 SYSTEM "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8174.xml">
 <!ENTITY RFC8544 SYSTEM "http://xml2rfc.ietf.org/public/rfc/bibxml/reference.RFC.8544.xml">
 ]>
 <?xml-stylesheet type="text/xsl" href="rfc2629.xslt" ?>
@@ -19,29 +20,17 @@
 <?rfc subcompact="no" ?>
 <?rfc comments="yes" ?>
 <?rfc inline="yes" ?>
-<rfc category="std" docName="draft-regext-brown-epp-related-objects-00" ipr="trust200902" submissionType="IETF" consensus="true">
+<rfc docName="draft-regext-brown-epp-related-objects-00" submissionType="independent" category="info" ipr="none">
 
 <front>
 <title abbrev="Related Objects Extension for EPP">Extensible Provisioning Protocol (EPP) Extension for Related Objects</title>
 
 <author fullname="Gavin Brown" initials="G" surname="Brown">
-<organization>CentralNic Group plc</organization>
 <address>
-<postal>
-<street>44 Gutter Lane</street>
-<city>London</city>
-<code>EC2V 6BR</code>
-<country>GB</country>
-</postal>
-<phone>+44 20 33 88 0600</phone>
-<email>gavin.brown@centralnic.com</email>
-<uri>https://www.centralnic.com</uri>
+<email>gavin.brown@fastmail.uk</email>
+<uri>https://gavinbrown.xyz</uri>
 </address>
 </author>
-
-<date month="March" year="2023" day="16"/>
-<area>Applications</area>
-<workgroup>Registration Protocols Extensions (regext)</workgroup>
 
 <abstract>
 <t>
@@ -66,9 +55,7 @@ This document describes an extension to the <spanx style="verb">&lt;info&gt;</sp
 </t>
 
 <section title="Conventions used in this document">
-<t>
-The key words <spanx style="verb">MUST</spanx>, <spanx style="verb">MUST NOT</spanx>, <spanx style="verb">REQUIRED</spanx>, <spanx style="verb">SHALL</spanx>, <spanx style="verb">SHALL NOT</spanx>, <spanx style="verb">SHOULD</spanx>, <spanx style="verb">SHOULD NOT</spanx>, <spanx style="verb">RECOMMENDED</spanx>, <spanx style="verb">MAY</spanx>, and <spanx style="verb">OPTIONAL</spanx> in this document are to be interpreted as described in <xref target="RFC2119"/>.
-</t>
+<t>The key words "<bcp14>MUST</bcp14>", "<bcp14>MUST NOT</bcp14>", "<bcp14>REQUIRED</bcp14>", "<bcp14>SHALL</bcp14>", "<bcp14>SHALL NOT</bcp14>", "<bcp14>SHOULD</bcp14>", "<bcp14>SHOULD NOT</bcp14>", "<bcp14>RECOMMENDED</bcp14>", "<bcp14>NOT RECOMMENDED</bcp14>", "<bcp14>MAY</bcp14>", and "<bcp14>OPTIONAL</bcp14>" in this document are to be interpreted as described in BCP 14 <xref target="RFC2119" format="default" sectionFormat="of" derivedContent="RFC2119"/> <xref target="RFC8174" format="default" sectionFormat="of" derivedContent="RFC8174"/> when, and only when, they appear in all capitals, as shown here. </t>
 
 <t>
 In examples, <spanx style="verb">C:</spanx> represents lines sent by a protocol client and <spanx style="verb">S:</spanx> represents lines returned by a protocol server.
@@ -93,13 +80,34 @@ These namespaces and schema definitions are used to identify both the base proto
 The XML namespace prefixes used in examples (such as the string <spanx style="verb">ro</spanx> in <spanx style="verb">ro:include</spanx>) are solely for illustrative purposes.
 A conforming implementation <bcp14>MUST NOT</bcp14> require the use of these or any other specific namespace prefixes.
 </t>
+
+<t indent="0" pn="section-1.1-7">
+In accordance with Section 3.2.2.1 of XML Schema Part 2: Datatypes
+<xref target="XSD-DATATYPES" format="default" sectionFormat="of" derivedContent="XSD-DATATYPES"/>
+, the allowable lexical representations for the
+<tt>xs:boolean</tt>
+datatype are the strings "
+<tt>0</tt>
+" and "
+<tt>false</tt>
+" for the concept 'false' and the strings "
+<tt>1</tt>
+" and "
+<tt>true</tt>
+" for the concept 'true'. Implementations
+<bcp14>MUST</bcp14>
+support both styles of lexical representation.
+</t>
+
 </section>
 </section>
+
+<section title="EPP Command Mapping">
 
 <section title="EPP &lt;info&gt; command">
 
 <t>
-This extension defines additional elements to extend the EPP <spanx style="verb">&lt;info&gt;</spanx> command and response.
+This specification defines additional elements to extend the EPP <spanx style="verb">&lt;info&gt;</spanx> command and response. No other EPP commands and responses are extended.
 </t>
 
 <t>
@@ -145,7 +153,7 @@ C:&lt;/epp&gt;
 </artwork>
 </figure>
 
-<section title="Response">
+<section title="EPP &lt;info&gt; response">
 
 <t>
 A server responding to an <spanx style="verb">&lt;info&gt;</spanx> command that has been extended with a <spanx style="verb">&lt;ro:info&gt;</spanx> element MAY include an <spanx style="verb">&lt;ro:infData&gt;</spanx> element in the <spanx style="verb">&lt;extension&gt;</spanx> element of the response.
@@ -256,7 +264,9 @@ S:&lt;/epp&gt;
 
 </section>
 
-<section title="Inclusion of related objects in &lt;info&gt; responses">
+</section>
+
+<section title="Operational considerations">
 
 <t>
 Servers <bcp14>MAY</bcp14> choose to include all, some, or none of the relevant requested objects in the <spanx style="verb">&lt;ro:infData&gt;</spanx> element, according to applicable policies.
@@ -267,10 +277,11 @@ When determining whether to include a related object in the <spanx style="verb">
 </t>
 
 <t>
-Since EPP does not provide a way for servers to indicate a partial success or failure of a command, servers <bcp14>MUST NOT</bcp14> return an error if a related object cannot be included in a response. Instead, the object should simply be omitted from the <spanx style="verb">&lt;ro:infData&gt;</spanx> element. An error response <bcp14>MUST</bcp14> only be used when the server cannot disclose the information about the "primary" object, that is, the object specified in the <spanx style="verb">&lt;info&gt;</spanx> element.
+Since EPP does not provide a way for servers to indicate a partial success or failure of a command, servers <bcp14>MUST NOT</bcp14> return an error if a related object cannot be included in a response. Instead, the object should simply be omitted from the <spanx style="verb">&lt;ro:infData&gt;</spanx> element. An error response <bcp14>MUST</bcp14> only be used when the server cannot disclose the information about the "primary" object, that is, the object specified in the <spanx style="verb">&lt;info&gt;</spanx> command.
 </t>
 
 </section>
+
 
 <section anchor="security-considerations" title="Security considerations">
 <t>
@@ -281,12 +292,14 @@ The extension described in this document does not provide any security services 
 <section anchor="IANA" title="IANA considerations">
 <section title="XML namespace">
 <t>
-This document uses URNs to describe XML namespaces and XML schemas conforming to a registry mechanism described in <xref target="RFC3688"/>. The following URI assignment has been made by IANA:
+This document uses URIs to describe XML namespaces and XML schemas conforming to a registry mechanism described in <xref target="RFC3688"/>.
+IANA is requested to make the following registrations in the <xref target="IETF-XML-REGISTRY">IETF XML Registry</xref>:
 </t>
 
 <t>
-Registration for the TTL namespace:
+Registration for the XML namespace ("ns" subregistry):
 </t>
+
 <list>
 <t>
 <strong>URI:</strong> <spanx style="verb">urn:ietf:params:xml:ns:epp:relatedObjects-1.0</spanx>
@@ -300,8 +313,9 @@ Registration for the TTL namespace:
 </list>
 
 <t>
-Registration for the TTL XML schema:
+Registration for the XML schema ("schema" subregistry):
 </t>
+
 <list>
 <t>
 <strong>URI:</strong> <spanx style="verb">urn:ietf:params:xml:ns:epp:relatedObjects-1.0</spanx>
@@ -317,7 +331,7 @@ Registration for the TTL XML schema:
 
 <section title="EPP extension registry">
 <t>
-The EPP extension described in this document has been registered by the IANA in the Extensions for the "Extensible Provisioning Protocol (EPP)" registry described in <xref target="RFC7451"/>.
+IANA is requested to to make the following registration in the <xref target="EPP-EXTENSION-REGISTRY">Extensions for the "Extensible Provisioning Protocol (EPP)"</xref> registry described in <xref target="RFC7451"/>.
 The details of the registration are as follows:
 </t>
 
@@ -326,7 +340,7 @@ The details of the registration are as follows:
 <strong>Name of Extension:</strong> Extensible Provisioning Protocol (EPP) Extension for Related Objects
 </t>
 <t>
-<strong>Document Status:</strong> Standards Track
+<strong>Document Status:</strong> Other
 </t>
 <t>
 <strong>Reference:</strong> URL of this document
@@ -366,7 +380,7 @@ The details of the registration are as follows:
     &lt;/documentation&gt;
   &lt;/annotation&gt;
 
-  &lt;element name=&quot;info&quot;  type=&quot;ro:info&quot; /&gt;
+  &lt;element name=&quot;info&quot; type=&quot;ro:info&quot; /&gt;
   &lt;element name=&quot;infData&quot; type=&quot;ro:infData&quot; /&gt;
 
   &lt;complexType name=&quot;info&quot;&gt;
@@ -408,7 +422,38 @@ The details of the registration are as follows:
 &RFC5732;
 &RFC5733;
 &RFC7451;
+&RFC8174;
 &RFC8544;
+
+<reference anchor="XSD-DATATYPES" target="https://www.w3.org/TR/2004/REC-xmlschema-2-20041028/" quoteTitle="true" derivedAnchor="XSD-DATATYPES">
+  <front>
+    <title>XML Schema Part 2: Datatypes Second Edition</title>
+    <author initials="P." surname="Biron" fullname="Paul V. Biron" role="editor"/>
+    <author initials="A." surname="Malhotra" fullname="Ashok Malhotra" role="editor"/>
+    <date month="October" year="2004"/>
+  </front>
+  <refcontent>W3C Recommendation</refcontent>
+  <annotation>Latest version available at <eref target="https://www.w3.org/TR/xmlschema-2/" brackets="angle"/>.</annotation>
+</reference>
+
+<reference anchor="IETF-XML-REGISTRY" target="https://www.iana.org/assignments/xml-registry">
+  <front>
+    <title>IETF XML Registry</title>
+    <author>
+      <organization>IANA</organization>
+    </author>
+  </front>
+</reference>
+
+<reference anchor="EPP-EXTENSION-REGISTRY" target="https://www.iana.org/assignments/epp-extensions">
+  <front>
+    <title>Extensions for the Extensible Provisioning Protocol (EPP)</title>
+    <author>
+      <organization>IANA</organization>
+    </author>
+  </front>
+</reference>
+
 </references>
 </back>
 </rfc>
