@@ -37,6 +37,14 @@
 This document describes an extension to the Extensible Provisioning Protocol (EPP) that allows EPP clients to request the inclusion of related objects in responses to <spanx style="verb">&lt;info&gt;</spanx> commands.
 </t>
 </abstract>
+
+
+<note title="About this document">
+<t>
+The source for this document, and an issue tracker, may can be found at <eref target="https://github.com/gbxyz/epp-related-objects-extension"/>.
+</t>
+</note>
+
 </front>
 
 <middle>
