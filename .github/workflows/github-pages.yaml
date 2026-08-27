@@ -1,0 +1,36 @@
+name: github-pages
+
+on:
+  push:
+    branches:
+     - main
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write
+      pages: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - run: apt -qqq update
+
+      - run: apt -qqq install xml2rfc
+
+      - run: rm -rf _site ; mkdir -v _site
+
+      - run: xml2rfc --html --out _site/index.html draft.xml
+
+      - run: tar --directory=_site -z -c -v -f github-pages .
+
+      - uses: actions/configure-pages@v4
+
+      - uses: actions/upload-pages-artifact@v3
+
+      - uses: actions/deploy-pages@v4
