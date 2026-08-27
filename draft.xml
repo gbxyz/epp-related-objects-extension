@@ -20,7 +20,7 @@
 <?rfc subcompact="no" ?>
 <?rfc comments="yes" ?>
 <?rfc inline="yes" ?>
-<rfc docName="draft-regext-brown-epp-related-objects-00" submissionType="independent" category="info" ipr="none">
+<rfc docName="epp-related-objects-extension-00" submissionType="independent" category="info" ipr="none">
 
 <front>
 <title abbrev="Related Objects Extension for EPP">Extensible Provisioning Protocol (EPP) Extension for Related Objects</title>
